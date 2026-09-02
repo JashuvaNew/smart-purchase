@@ -4,40 +4,20 @@ export class PurchaseRequestPage {
 
     readonly page: Page;
 
-    // =====================================================
-    // Sidebar navigation
-    // =====================================================
-
     readonly purchaseMenu: Locator;
     readonly purchaseRequestMenu: Locator;
-
-    // =====================================================
-    // Purchase Request listing page
-    // =====================================================
 
     readonly pageHeading: Locator;
     readonly newPurchaseRequestButton: Locator;
     readonly exportCsvButton: Locator;
-
-    // =====================================================
-    // New Purchase Request modal
-    // =====================================================
 
     readonly modalHeading: Locator;
     readonly purchaseRequestNameInput: Locator;
     readonly requestorDropdown: Locator;
     readonly purchaseRequestTypeSelect: Locator;
 
-    // =====================================================
-    // Create / Close
-    // =====================================================
-
     readonly createPurchaseRequestButton: Locator;
     readonly closeButton: Locator;
-
-    // =====================================================
-    // Success popup
-    // =====================================================
 
     readonly successMessage: Locator;
     readonly successOkButton: Locator;
@@ -46,10 +26,6 @@ export class PurchaseRequestPage {
 
         this.page = page;
 
-        // =====================================================
-        // Sidebar navigation
-        // =====================================================
-
         this.purchaseMenu = page.locator(
             'aside a.nav-link[data-bs-toggle="collapse"][href="#section-1"]'
         );
@@ -57,10 +33,6 @@ export class PurchaseRequestPage {
         this.purchaseRequestMenu = page
             .locator('aside a.nav-link[href$="/indent-management"]')
             .first();
-
-        // =====================================================
-        // Purchase Request listing page
-        // =====================================================
 
         this.pageHeading = page.getByRole('heading', {
             name: 'Purchase Request'
@@ -74,9 +46,6 @@ export class PurchaseRequestPage {
             name: 'Export CSV'
         });
 
-        // =====================================================
-        // New Purchase Request modal
-        // =====================================================
 
         this.modalHeading = page.locator('#indent_heading');
 
@@ -84,7 +53,6 @@ export class PurchaseRequestPage {
             '#indent_name'
         );
 
-        // Requestor Choices.js control
         this.requestorDropdown = page
             .locator('div.choices')
             .filter({
@@ -98,9 +66,6 @@ export class PurchaseRequestPage {
             '#indent_type'
         );
 
-        // =====================================================
-        // Create / Close
-        // =====================================================
 
         this.createPurchaseRequestButton = page.locator(
             '#add_new_indent'
@@ -110,22 +75,14 @@ export class PurchaseRequestPage {
             name: 'Close'
         });
 
-        // =====================================================
-        // Success popup
-        // =====================================================
-
         this.successMessage = page.locator(
-            '.swal2-popup.swal2-show #swal2-html-container'
+            '.swal2-html-container'
         );
-        
+
         this.successOkButton = page.locator(
-            '.swal2-popup.swal2-show button.swal2-confirm'
+            'button.swal2-confirm'
         );
     }
-
-    // =====================================================
-    // Navigation
-    // =====================================================
 
     async navigateToPurchaseRequest() {
 
@@ -175,10 +132,6 @@ export class PurchaseRequestPage {
         });
     }
 
-    // =====================================================
-    // New Purchase Request
-    // =====================================================
-
     async openNewPurchaseRequest() {
 
         await this.newPurchaseRequestButton.click();
@@ -188,18 +141,10 @@ export class PurchaseRequestPage {
         });
     }
 
-    // =====================================================
-    // Purchase Request Name
-    // =====================================================
-
     async enterPurchaseRequestName(name: string) {
 
         await this.purchaseRequestNameInput.fill(name);
     }
-
-    // =====================================================
-    // Requestor
-    // =====================================================
 
     async selectRequestor(requestor: string) {
 
@@ -240,10 +185,6 @@ export class PurchaseRequestPage {
         });
     }
 
-    // =====================================================
-    // Purchase Request Type
-    // =====================================================
-
     async selectPurchaseRequestType(type: string) {
 
         const typeValues: Record<string, string> = {
@@ -283,10 +224,6 @@ export class PurchaseRequestPage {
                 });
         }
     }
-
-    // =====================================================
-    // Warehouse
-    // =====================================================
 
     async selectWarehouse(warehouse: string) {
 
@@ -329,10 +266,6 @@ export class PurchaseRequestPage {
         // Select warehouse
         await option.click();
 
-        // =================================================
-        // Verify underlying select received a value
-        // =================================================
-
         const warehouseSelect = this.page.locator(
             '#warehouseSearch'
         );
@@ -340,10 +273,6 @@ export class PurchaseRequestPage {
         await expect(warehouseSelect).not.toHaveValue('', {
             timeout: 5000
         });
-
-        // =================================================
-        // Wait for warehouse address/details
-        // =================================================
 
         await this.page
             .locator('#warehouse_details')
@@ -353,38 +282,19 @@ export class PurchaseRequestPage {
             });
     }
 
-    // =====================================================
-    // Create Purchase Request
-    // =====================================================
+async createPurchaseRequest() {
+    await this.createPurchaseRequestButton.click();
+}
 
-    async createPurchaseRequest() {
+  async clickSuccessOk() {
 
-        await this.createPurchaseRequestButton.click();
-    
-        // Wait for the success popup to appear
-        await this.successMessage.waitFor({
-            state: 'visible',
-            timeout: 15000
-        });
-    }
+    await this.successOkButton.waitFor({
+        state: 'visible',
+        timeout: 10000
+    });
 
-    // =====================================================
-    // Success popup
-    // =====================================================
-
-    async clickSuccessOk() {
-
-        await this.successOkButton.waitFor({
-            state: 'visible',
-            timeout: 5000
-        });
-    
-        await this.successOkButton.click();
-    }
-
-    // =====================================================
-    // Complete Purchase Request
-    // =====================================================
+    await this.successOkButton.click();
+}
 
     async createNewPurchaseRequest(
         name: string,
