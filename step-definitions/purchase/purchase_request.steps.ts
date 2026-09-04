@@ -102,14 +102,24 @@ When(
     }
 );
 
-Then(
-    'I should see the success message',
-    async function () {
+Then('I should see the success message', async function () {
 
-        await expect(
-            this.purchaseRequestPage.successMessage
-        ).toBeVisible({
-            timeout: 15000
-        });
-    }
-);
+    const purchaseRequestPage =
+        new PurchaseRequestPage(this.page);
+
+    await expect(
+        purchaseRequestPage.successMessage
+    ).toBeVisible({
+        timeout: 15000
+    });
+
+    await expect(
+        purchaseRequestPage.successMessage
+    ).toHaveText(
+        'A new purchase request has been created.',
+        {
+            timeout: 5000
+        }
+    );
+
+});
